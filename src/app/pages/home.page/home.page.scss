@@ -1,0 +1,14 @@
+.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // eje vertical
+  align-items: center; // eje horizontal
+  gap: 2rem;
+  text-transform: uppercase;
+}
+h1 {
+  font-size: 3em;
+  color: var(--fg);
+  font-family: var(--font-title);
+}

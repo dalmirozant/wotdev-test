@@ -1,0 +1,12 @@
+@if (person$ | async; as person) {
+  <h2><a routerLink="/app" class="links">←</a> {{ person.name }}</h2>
+  <p><strong>Birth Year: </strong>{{ person.birth_year }}</p>
+  <p><strong>Eye color:</strong> {{ person.eye_color }}</p>
+  <p><strong>Gender:</strong> {{ person.gender }}</p>
+  <p><strong>Hair color:</strong> {{ person.hair_color }}</p>
+  <p><strong>Height:</strong> {{ person.height }}</p>
+} @else if (error$ | async; as error) {
+  <p><a routerLink="/app" class="links">←</a> {{ error }}</p>
+} @else {
+  <p>Loading details</p>
+}

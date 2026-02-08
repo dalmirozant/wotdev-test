@@ -1,0 +1,29 @@
+.menu {
+  padding: 10px;
+  border-bottom: solid 1px var(--fg-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  h1 {
+    font-family: var(--font-title);
+    text-transform: uppercase;
+    color: var(--fg);
+  }
+  nav {
+    ul {
+      display: flex;
+      list-style: none;
+      gap: 10px;
+    }
+  }
+  @media screen and (max-width: 400px) {
+    display: block;
+    text-align: center;
+    nav {
+      ul {
+        justify-content: center;
+        padding: 0;
+      }
+    }
+  }
+}

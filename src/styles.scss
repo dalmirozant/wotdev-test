@@ -1,1 +1,54 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --bg: #0b0b0b; // negro profundo
+  --fg: #f5c518; // amarillo Star Wars
+  --fg-muted: #cfcfcf; // gris claro
+
+  --font-title: 'Bebas Neue', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--fg-muted);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+.buttons {
+  display: inline-block;
+  padding: 0.5em;
+  border-radius: 5px;
+  color: var(--bg);
+  background: var(--fg);
+  font-size: 0.9em;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+.active {
+  font-weight: 700;
+  opacity: 1 !important;
+}
+.links {
+  text-decoration: none;
+  color: var(--fg);
+  opacity: 0.8;
+  text-transform: uppercase;
+  &:hover {
+    opacity: 1;
+  }
+}
+input {
+  background: none;
+  border: solid 1px var(--fg);
+  border-radius: 3px;
+  color: var(--fg);
+  padding: 1em;
+  margin-bottom: 10px;
+}
