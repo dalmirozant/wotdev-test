@@ -1,6 +1,4 @@
-@if (loading$ | async) {
-  <p class="loading">Loading characters...</p>
-} @else if (error$ | async; as error) {
+@if (error$ | async; as error) {
   <p class="error">{{ error }} <button (click)="tryAgain()">Try Again</button></p>
 } @else {
   <!-- FILTER -->
@@ -26,14 +24,18 @@
     } @else {
       <p class="warning">No characters found</p>
     }
-  }
-  @if (response$ | async; as response) {
-    <div class="pagination">
-      <button class="buttons" (click)="prevPage()" [disabled]="!response.previous">Prev</button>
+    @if (response$ | async; as response) {
+      @if (!(filter$ | async)) {
+        <div class="pagination">
+          <button class="buttons" (click)="prevPage()" [disabled]="!response.previous">Prev</button>
 
-      Page {{ page$ | async }} / {{ response.total_pages }}
+          Page {{ page$ | async }} / {{ response.total_pages }}
 
-      <button class="buttons" (click)="nextPage()" [disabled]="!response.next">Next</button>
-    </div>
+          <button class="buttons" (click)="nextPage()" [disabled]="!response.next">Next</button>
+        </div>
+      }
+    }
+  } @else {
+    <p>Loading caracters...</p>
   }
 }

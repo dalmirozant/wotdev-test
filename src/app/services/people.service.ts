@@ -12,7 +12,6 @@ import {
   startWith,
   Subject,
   switchMap,
-  tap,
 } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -48,10 +47,21 @@ export class PeopleService {
     shareReplay(1),
   );
 
-  loading$ = merge(
-    this.page$.pipe(map(() => true)),
-    this.peopleResponse$.pipe(map(() => false)),
-  ).pipe(startWith(true));
+  searchPeopleByName(name: string): Observable<PersonItem[] | null> {
+    return this.http.get<FilteredResponse>(`${this.baseUrl}?name=${encodeURIComponent(name)}`).pipe(
+      map((response) => {
+        return response.result.map((r) => ({
+          uid: r.uid,
+          name: r.properties.name,
+          url: `${this.baseUrl}/${r.uid}`,
+        }));
+      }),
+      catchError(() => {
+        this.errorSubject$.next('Error loading filtered characters');
+        return of(null);
+      }),
+    );
+  }
 
   constructor(private http: HttpClient) {}
 

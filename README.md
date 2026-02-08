@@ -1,9 +1,11 @@
 # WotdevTest
 
+This is a small Angular app built as a skills test.
+It consumes the swapi.tech api
+
 ## Disclaimers:
 
-The API doesn't have a search param so I created a client side filter on each page.
+The **swapi.tech API** returns **different response shapes** depending on the type of request.  
+This has a direct impact on how pagination and filtering are handled in the application.
 
-Because of the simplicity of this project I decided to put the filter input directly in the people page instead of creating a separated component to avoid unnecesary complications
-
-I didn't create unit testings because of the near deadline
+- The filtered list is different to the paginated list. Also the filtered list doesn't have pagination fields.

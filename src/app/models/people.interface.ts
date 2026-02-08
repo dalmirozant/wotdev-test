@@ -73,3 +73,13 @@ interface Properties {
   films: string[];
   url: string;
 }
+
+//this is the filteredResponse. Is diferent than the list response
+interface FilteredResponse {
+  message: string;
+  result: Result[];
+  apiVersion: string;
+  timestamp: string;
+  support: Support;
+  social: Social;
+}
