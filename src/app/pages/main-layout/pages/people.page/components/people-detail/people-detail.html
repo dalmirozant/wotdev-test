@@ -1,5 +1,5 @@
 @if (person$ | async; as person) {
-  <h2><a routerLink="/app" class="links">←</a> {{ person.name }}</h2>
+  <h2 class="title"><a routerLink="/app" class="links">←</a> {{ person.name }}</h2>
   <p><strong>Birth Year: </strong>{{ person.birth_year }}</p>
   <p><strong>Gender:</strong> {{ person.gender }}</p>
   <p><strong>Eye color:</strong> {{ person.eye_color }}</p>

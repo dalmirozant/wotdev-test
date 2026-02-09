@@ -31,6 +31,11 @@ body {
     cursor: not-allowed;
   }
 }
+.title {
+  font-size: 3em;
+  color: var(--fg);
+  font-family: var(--font-title);
+}
 .active {
   font-weight: 700;
   opacity: 1 !important;
