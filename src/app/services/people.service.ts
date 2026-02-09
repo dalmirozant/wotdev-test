@@ -4,14 +4,17 @@ import {
   BehaviorSubject,
   catchError,
   combineLatest,
+  from,
   map,
   merge,
+  mergeMap,
   Observable,
   of,
   shareReplay,
   startWith,
   Subject,
   switchMap,
+  toArray,
 } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -28,7 +31,7 @@ export class PeopleService {
   private retrySubject$ = new Subject<void>();
   retry$ = this.retrySubject$.asObservable().pipe(startWith(undefined));
 
-  peopleResponse$: Observable<PeopleResponse | null> = combineLatest([
+  peopleResponse$: Observable<PeopleResponse | null | undefined> = combineLatest([
     this.page$,
     this.retry$,
   ]).pipe(
@@ -42,6 +45,7 @@ export class PeopleService {
           this.errorSubject$.next('Error loading characters');
           return of(null);
         }),
+        startWith(undefined),
       ),
     ),
     shareReplay(1),
@@ -65,6 +69,7 @@ export class PeopleService {
 
   constructor(private http: HttpClient) {}
 
+  //GET PERSON DETAILS
   getDetails(id: string): Observable<Properties | null> {
     return this.http.get<Details>(`${this.baseUrl}/${id}`).pipe(
       map((details) => details.result.properties),
@@ -74,6 +79,18 @@ export class PeopleService {
       }),
     );
   }
+
+  //GET INFO FROM RELATED EPS
+  resolveNames(urls?: string[]): Observable<string[]> {
+    if (!urls?.length) {
+      return of([]);
+    }
+
+    return from(urls).pipe(
+      mergeMap((url) => this.http.get<Details>(url).pipe(map((res) => res.result.properties.name))),
+      toArray(),
+    );
+  } //TODO EXTRACT INFO FROM RELATED EPS IN COMPONENT
 
   nextPage() {
     this.pageSubject$.next(this.pageSubject$.value + 1);
@@ -87,5 +104,9 @@ export class PeopleService {
 
   tryAgain() {
     this.retrySubject$.next();
+  }
+
+  resetPage() {
+    this.pageSubject$.next(1);
   }
 }

@@ -25,7 +25,7 @@
       <p class="warning">No characters found</p>
     }
     @if (response$ | async; as response) {
-      @if (!(filter$ | async)) {
+      @if (!nameControl.value) {
         <div class="pagination">
           <button class="buttons" (click)="prevPage()" [disabled]="!response.previous">Prev</button>
 
