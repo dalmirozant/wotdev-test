@@ -80,17 +80,19 @@ export class PeopleService {
     );
   }
 
-  //GET INFO FROM RELATED EPS
-  resolveNames(urls?: string[]): Observable<string[]> {
+  //GET DATA FROM RELATED EPS
+  resolveNames(urls?: string[], prop: 'name' | 'title' = 'name'): Observable<string[]> {
     if (!urls?.length) {
       return of([]);
     }
 
     return from(urls).pipe(
-      mergeMap((url) => this.http.get<Details>(url).pipe(map((res) => res.result.properties.name))),
+      mergeMap((url) =>
+        this.http.get<Details>(url).pipe(map((res) => res.result.properties[prop] as string)),
+      ),
       toArray(),
     );
-  } //TODO EXTRACT INFO FROM RELATED EPS IN COMPONENT
+  }
 
   nextPage() {
     this.pageSubject$.next(this.pageSubject$.value + 1);

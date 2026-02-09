@@ -72,6 +72,7 @@ interface Properties {
   starships: string[];
   films: string[];
   url: string;
+  title?: string;
 }
 
 //this is the filteredResponse. Is diferent than the list response

@@ -1,12 +1,37 @@
 @if (person$ | async; as person) {
   <h2><a routerLink="/app" class="links">←</a> {{ person.name }}</h2>
   <p><strong>Birth Year: </strong>{{ person.birth_year }}</p>
-  <p><strong>Eye color:</strong> {{ person.eye_color }}</p>
   <p><strong>Gender:</strong> {{ person.gender }}</p>
+  <p><strong>Eye color:</strong> {{ person.eye_color }}</p>
   <p><strong>Hair color:</strong> {{ person.hair_color }}</p>
+  <p><strong>Skin color:</strong> {{ person.skin_color }}</p>
   <p><strong>Height:</strong> {{ person.height }}</p>
+  <p>
+    <strong>Films:</strong>
+    @if (person.films.length && person.films[0].startsWith('http')) {
+      <span> Loading films…</span>
+    } @else {
+      {{ person.films.join(', ') }}
+    }
+  </p>
+  <p>
+    <strong>Starships:</strong>
+    @if (person.starships.length && person.starships[0].startsWith('http')) {
+      <span> Loading starships…</span>
+    } @else {
+      {{ person.starships.join(', ') }}
+    }
+  </p>
+  <p>
+    <strong>Vehicles:</strong>
+    @if (person.vehicles.length && person.vehicles[0].startsWith('http')) {
+      <span> Loading vehicles…</span>
+    } @else {
+      {{ person.vehicles.join(', ') }}
+    }
+  </p>
 } @else if (error$ | async; as error) {
   <p><a routerLink="/app" class="links">←</a> {{ error }}</p>
 } @else {
-  <p>Loading details</p>
+  <p>Loading details...</p>
 }
