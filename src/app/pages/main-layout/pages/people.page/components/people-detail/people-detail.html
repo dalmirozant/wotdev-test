@@ -1,4 +1,4 @@
-@if (person$ | async; as person) {
+@if (person(); as person) {
   <h2 class="title"><a routerLink="/app" class="links">←</a> {{ person.name }}</h2>
   <p><strong>Birth Year: </strong>{{ person.birth_year }}</p>
   <p><strong>Gender:</strong> {{ person.gender }}</p>
@@ -30,7 +30,7 @@
       {{ person.vehicles.join(', ') }}
     }
   </p>
-} @else if (error$ | async; as error) {
+} @else if (error(); as error) {
   <p><a routerLink="/app" class="links">←</a> {{ error }}</p>
 } @else {
   <p>Loading details...</p>

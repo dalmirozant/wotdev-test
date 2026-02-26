@@ -1,9 +1,9 @@
-@if (error$ | async; as error) {
+@if (error(); as error) {
   <p class="error">{{ error }} <button (click)="tryAgain()">Try Again</button></p>
 } @else {
   <!-- FILTER -->
   <input type="text" [formControl]="nameControl" placeholder="Filter by name" />
-  @if (filter$ | async; as value) {
+  @if (filter(); as value) {
     @if (value.length > 0) {
       <button type="button" class="reset" (click)="resetFilter()" aria-label="Reset filter">
         ✕
@@ -12,7 +12,7 @@
   }
 
   <!-- LIST -->
-  @if (filteredPeople$ | async; as filteredPeople) {
+  @if (filteredPeople(); as filteredPeople) {
     @if (filteredPeople.length > 0) {
       <ul>
         @for (person of filteredPeople; track person.uid) {
@@ -24,12 +24,12 @@
     } @else {
       <p class="warning">No characters found</p>
     }
-    @if (response$ | async; as response) {
+    @if (response(); as response) {
       @if (!nameControl.value) {
         <div class="pagination">
           <button class="buttons" (click)="prevPage()" [disabled]="!response.previous">Prev</button>
 
-          Page {{ page$ | async }} / {{ response.total_pages }}
+          Page {{ page() }} / {{ response.total_pages }}
 
           <button class="buttons" (click)="nextPage()" [disabled]="!response.next">Next</button>
         </div>

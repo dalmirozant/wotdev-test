@@ -1,18 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PeopleService } from '../../../../../../services/people.service';
-import {
-  combineLatest,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  Observable,
-  startWith,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-people-list',
@@ -21,39 +13,44 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './people-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PeopleList implements OnInit {
-  response$!: Observable<PeopleResponse | null | undefined>;
-  page$!: Observable<number>;
-  error$!: Observable<string | null>;
+export class PeopleList {
+  private readonly peopleService = inject(PeopleService);
+
   nameControl = new FormControl('', { nonNullable: true });
 
-  filteredPeople$!: Observable<PersonItem[] | null | undefined>;
-  filter$!: Observable<string | null>;
+  private readonly filter$ = this.nameControl.valueChanges.pipe(
+    startWith(''),
+    debounceTime(300),
+    distinctUntilChanged(),
+  );
 
-  constructor(private peopleService: PeopleService) {}
+  readonly response = toSignal(this.peopleService.peopleResponse$, {
+    initialValue: undefined as PeopleResponse | null | undefined,
+  });
 
-  ngOnInit(): void {
-    this.response$ = this.peopleService.peopleResponse$;
-    this.page$ = this.peopleService.page$;
-    this.filter$ = this.nameControl.valueChanges.pipe(
-      startWith(''),
-      debounceTime(300),
-      distinctUntilChanged(),
-    );
+  readonly page = toSignal(this.peopleService.page$, { initialValue: 1 });
 
-    this.filteredPeople$ = combineLatest([this.page$, this.filter$]).pipe(
-      switchMap(([page, filter]) => {
-        if (filter && filter.length > 0) {
-          return this.peopleService.searchPeopleByName(filter).pipe(
-            startWith(undefined),
-            tap(() => console.log),
-          );
-        }
+  readonly error = toSignal(this.peopleService.error$, { initialValue: null });
 
-        return this.peopleService.peopleResponse$.pipe(map((response) => response?.results));
-      }),
-    ); // TODO PUT THIS LOGIC IN A SEPARATED COMPONENT
-  }
+  readonly filter = toSignal(this.filter$, { initialValue: '' });
+
+  private readonly filteredPeople$ = this.filter$.pipe(
+    switchMap((filter) => {
+      const trimmed = filter.trim();
+
+      if (trimmed.length > 0) {
+        return this.peopleService.searchPeopleByName(trimmed).pipe(
+          startWith(undefined as unknown as PersonItem[] | null | undefined),
+        );
+      }
+
+      return this.peopleService.peopleResponse$.pipe(map((response) => response?.results));
+    }),
+  );
+
+  readonly filteredPeople = toSignal(this.filteredPeople$, {
+    initialValue: undefined as PersonItem[] | null | undefined,
+  });
 
   nextPage() {
     this.peopleService.nextPage();
